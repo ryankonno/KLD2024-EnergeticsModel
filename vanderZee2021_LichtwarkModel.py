@@ -80,7 +80,12 @@ params = {
     ############################################
     # Changes to the force-length properties
     's_l': 0,                                 # double, Shift in fasicle length, m
-    'F_la_width': 0.3                        # double, Force-length width parameter, unitless
+    'F_la_width': 0.3,                        # double, Force-length width parameter, unitless
+
+    ############################################
+    # Recovery heat
+    'include_recovery': True,                  # Include recovery heat
+    'recovery_ratio': 1,                     # Ratio of initial enthalpy to recovery heat
 }
 
 ###############################################################

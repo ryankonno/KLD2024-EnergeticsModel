@@ -54,7 +54,10 @@ def dHdt(act, t, e_ce, dedt_ce, F, params):
 		return -dedt_ce * F # Output in 1/s
 
 	# Compute the energy rates and scale to W
-	dEdt = (dQdt(t, act, e_ce, dedt_ce, F) + W(dedt_ce, F)) * F_0 * l_0 # W
+
+	dEinitdt = (dQdt(t, act, e_ce, dedt_ce, F) + W(dedt_ce, F)) * F_0 * l_0
+	Q_rec = params['recovery_ratio'] * dEinitdt
+	dEdt = (dEinitdt + Q_rec * params['include_recovery'])  # W
 	Q_tot    = dQdt(t, act, e_ce, dedt_ce, F) * F_0 * l_0
 	Q_m_tot  = dQmdt_total(t, act, e_ce, dedt_ce, F) * F_0 * l_0
 	Q_sl_tot = dQsldt_total(t, act, e_ce, dedt_ce, F) * F_0 * l_0
@@ -66,6 +69,7 @@ def dHdt(act, t, e_ce, dedt_ce, F, params):
 	Sum_Qtot = np.cumsum(Q_tot * dt)
 	Sum_Wtot = np.cumsum(W_tot * dt)
 	Sum_E    = np.cumsum(dEdt * dt)
+	Sum_Qrec = np.cumsum(Q_rec * dt) 
 
 	# Store data
 	Energy_data = {
@@ -73,6 +77,7 @@ def dHdt(act, t, e_ce, dedt_ce, F, params):
 	    'Q_sl': Sum_QSL,
 	    'Q_tot': Sum_Qtot,
 	    'W_tot': Sum_Wtot,
+		'Q_rec': Sum_Qrec,
 	    'E': Sum_E
 	}
 
